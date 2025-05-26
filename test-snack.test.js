@@ -2,14 +2,46 @@
 //Creare un test che verifichi la seguente descrizione:
 //"La funzione getInitials restituisce le iniziali di un nome completo."
 
+function getInitials(name) {
+  return (
+    name.charAt(0).toUpperCase() +
+    name.charAt(name.indexOf(" ") + 1).toUpperCase()
+  );
+}
+
+test("getInitials restituisce le iniziali di un nome completo", () => {
+  expect(getInitials("Carlo Rossi")).toBe("CR");
+  expect(getInitials("Victor Bianchi")).toBe("VB");
+});
+
 //snack 2
 //Creare un test che verifichi la seguente descrizione:
 // "La funzione createSlug restituisce una stringa in lowercase."
+function createSlug(text) {
+  return text.toLowerCase();
+}
+
+test("La funzione createSlug deve restituire una stringa in lowercase", () => {
+  expect(createSlug("Hello World")).toBe("hello world");
+  expect(createSlug("Ciao123")).toBe("ciao123");
+});
 
 // snack 3
 // Creare un test che verifichi la seguente descrizione:
 // "La funzione average calcola la media aritmetica di un array di numeri."
+function average(numbers) {
+  if (!Array.isArray(numbers) || numbers.length === 0) {
+    return NaN;
+  }
+  const sum = numbers.reduce((acc, num) => acc + num, 0);
+  return sum / numbers.length;
+}
 
+test("La funzione average deve calcolare correttamente la media aritmetica", () => {
+  expect(average([2, 4, 6, 8])).toBe(5);
+  expect(average([-2, -4, -6, -8])).toBe(-5);
+  expect(average([])).toBeNaN();
+});
 // snack 4
 // Creare un test che verifichi la seguente descrizione:
 //"La funzione createSlug sostituisce gli spazi con -."
