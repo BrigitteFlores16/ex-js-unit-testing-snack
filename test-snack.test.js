@@ -93,3 +93,76 @@ test("La funzione isAnagram deve verificare se due stringhe sono anagrammi", () 
 // Creare un test che verifichi le seguenti descrizioni:
 // "La funzione findPostById restituisce il post corretto dato l’array di post e l’id"
 //Creare uno o più test aggiuntivi che controllino che la struttura dati passati sia conforme (ogni post ha le proprietà id, title e slug, viene passato un id numerico).
+
+function findPostById(posts, id) {
+  if (typeof id !== "number") {
+    throw new Error("L'ID deve essere un numero");
+  }
+  return posts.find((post) => post.id === id) || null;
+}
+
+test("La funzione findPostById deve restituire il post corretto dato l’array di post e l’id", () => {
+  const posts = [
+    {
+      id: 1,
+      title: "Introduzione a Python",
+      slug: "introduzione-a-Python",
+    },
+    { id: 2, title: "Ciao Mondo ", slug: "ciao-mondo" },
+    {
+      id: 3,
+      title: "Introduzione a React",
+      slug: "introduzione-a-react",
+    },
+  ];
+
+  expect(findPostById(posts, 2)).toEqual({
+    id: 2,
+    title: "Ciao Mondo ",
+    slug: "ciao-mondo",
+  });
+  expect(findPostById(posts, 4)).toBeNull();
+});
+
+test("Ogni post deve avere le proprietà id, title e slug", () => {
+  const posts = [
+    {
+      id: 1,
+      title: "Introduzione a Bootstrap",
+      slug: "introduzione-a-bootstrap",
+    },
+    { id: 2, title: "Ciao Mondo ", slug: "ciao-mondo" },
+    {
+      id: 3,
+      title: "Introduzione a React",
+      slug: "introduzione-a-react",
+    },
+  ];
+
+  posts.forEach((post) => {
+    expect(post).toHaveProperty("id");
+    expect(post).toHaveProperty("title");
+    expect(post).toHaveProperty("slug");
+    expect(typeof post.id).toBe("number");
+  });
+});
+
+//Bonus
+//Challenge: describe() - organizzazione dei test
+//Organizza i test in describe() raggruppandoli per argomento.
+
+//Snack 8 (Bonus)
+//Creare due test che verifichino le seguenti descrizioni:
+// "Dopo aver aggiunto un post con la funzione addPost, l'array posts deve contenere un elemento in più."
+//"Dopo aver rimosso un post con la funzione removePost, l'array posts deve contenere un elemento in meno."
+//Note:
+//Si consiglia di resettare l'array di post dopo ogni test. Ti ricordi come si fa?
+
+//Snack 9 (Bonus)
+//Creare un test che verifichi la seguente descrizione:
+//"Se si tenta di aggiungere un post con un id o uno slug già esistente, la funzione addPost deve lanciare un errore."
+// Nota:Gli errori devono essere chiari e distinti, es. "Slug già esistente" e “Id già esistente”.
+
+// Snack 10 (Bonus) :createSlug() – Incrementare lo slug se esiste già
+// Creare un test che verifichi la seguente descrizione:
+//"Se viene passato un array di post come secondo argomento, la funzione createSlug incrementa di 1 se lo slug esiste già."
