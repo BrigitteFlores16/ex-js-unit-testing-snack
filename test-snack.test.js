@@ -158,11 +158,96 @@ test("Ogni post deve avere le proprietà id, title e slug", () => {
 //Note:
 //Si consiglia di resettare l'array di post dopo ogni test. Ti ricordi come si fa?
 
+function addPost(posts, newPost) {
+  if (posts.some((post) => post.id === newPost.id)) {
+    throw new Error("Id già esistente");
+  }
+
+  if (posts.some((post) => post.slug === newPost.slug)) {
+    throw new Error("Slug già esistente");
+  }
+
+  return [...posts, newPost];
+}
+
+function removePost(posts, id) {
+  return posts.filter((post) => post.id !== id);
+}
+
+beforeEach(() => {
+  posts = [
+    {
+      id: 1,
+      title: "Introduzione a Pithon",
+      slug: "introduzione-a-pithon",
+    },
+    { id: 2, title: "Ciao Mondo ", slug: "ciao-mondo" },
+  ];
+});
+
+test("Dopo aver aggiunto un post, l'array deve contenere un elemento in più", () => {
+  const newPost = {
+    id: 3,
+    id: 3,
+    title: "Primo Post",
+    slug: "primo-post",
+  };
+  const updatedPosts = addPost(posts, newPost);
+
+  expect(updatedPosts.length).toBe(posts.length + 1);
+  expect(updatedPosts).toContainEqual(newPost);
+});
+
+test("Dopo aver rimosso un post, l'array deve contenere un elemento in meno", () => {
+  const updatedPosts = removePost(posts, 1);
+
+  expect(updatedPosts.length).toBe(posts.length - 1);
+  expect(updatedPosts.some((post) => post.id === 1)).toBe(false);
+});
 //Snack 9 (Bonus)
 //Creare un test che verifichi la seguente descrizione:
 //"Se si tenta di aggiungere un post con un id o uno slug già esistente, la funzione addPost deve lanciare un errore."
 // Nota:Gli errori devono essere chiari e distinti, es. "Slug già esistente" e “Id già esistente”.
 
+test("La funzione addPost deve lanciare un errore se si aggiunge un post con id o slug esistente", () => {
+  const existingPost = {
+    id: 1,
+    title: "Hello World",
+    slug: "hello-world",
+  };
+
+  const postWithDuplicateId = {
+    id: 1,
+    title: "Nuovo Post",
+    slug: "nuovo-post",
+  };
+
+  expect(() => {
+    addPost([existingPost], postWithDuplicateId);
+  }).toThrow("Id già esistente");
+
+  const postWithDuplicateSlug = {
+    id: 2,
+    title: "Altro Post",
+    slug: "hello-world",
+  };
+
+  expect(() => {
+    addPost([existingPost], postWithDuplicateSlug);
+  }).toThrow("Slug già esistente");
+});
+
 // Snack 10 (Bonus) :createSlug() – Incrementare lo slug se esiste già
 // Creare un test che verifichi la seguente descrizione:
 //"Se viene passato un array di post come secondo argomento, la funzione createSlug incrementa di 1 se lo slug esiste già."
+
+test("createSlug deve incrementare lo slug se esiste già", () => {
+  const existingPosts = [
+    { id: 1, title: "Post 1", slug: "primo-post" },
+    { id: 2, title: "Post 2", slug: "primo-post-1" },
+  ];
+
+  expect(createSlug("Primo Post", existingPosts)).toBe("primo-post-2");
+  expect(createSlug("Post Nuovo", existingPosts)).toBe("post-nuovo");
+  expect(createSlug("Secondo Post")).toBe("secondo-post");
+});
